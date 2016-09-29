@@ -20,3 +20,4 @@ stat.plot(kind='bar', fontsize=14, width=0.9, color="red")
 plt.xticks(rotation=0)
 plt.ylabel('Proportion', fontsize=14)
 plt.xlabel('Quality', fontsize=14)
+БУ БУ
