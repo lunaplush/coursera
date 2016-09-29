@@ -1,4 +1,4 @@
-from sklearn.cross_validation import train_test_split
+пше from sklearn.cross_validation import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
 from sklearn.ensemble import RandomForestRegressor
@@ -21,3 +21,5 @@ plt.xticks(rotation=0)
 plt.ylabel('Proportion', fontsize=14)
 plt.xlabel('Quality', fontsize=14)
 БУ БУ
+не бу бу
+бу не бу
