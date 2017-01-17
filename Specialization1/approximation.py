@@ -8,6 +8,7 @@ def func(x):
 
 import matplotlib.pyplot as plt
 
+
 plt.plot(x,func(x))
 
 
