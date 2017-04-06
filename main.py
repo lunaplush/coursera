@@ -117,7 +117,7 @@ class LR(ClassifierMixin, BaseEstimator):
                 deltaL = gradf(self.w,X,y,self.l1, self.l2)
                 print("       Gradient: ", deltaL[0:4])
                 print("        self.w do ch:", self.w[0:4]  )
-                self.w = self.w - self.lr * deltaL ##check +-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                self.w = self.w - self.lr * deltaL/n ##check +-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 
                 lossf_current = lossf(self.w, X,y,self.l1, self.l2)
 #                if(lossf_current == np.inf):
