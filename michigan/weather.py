@@ -94,33 +94,35 @@ v2015 = []
 x2015 = []
 color = []
 for d in tmin2015.Date :
-    print(d)
+   
     try:
-        vmin2015 = tmin2015[tmin2015.Date == d].iloc[0].Data_Value
-        print("vmin2015", vmin2015)
-        try:
-            print()
-            vmin = tmin[tmin.Date == d].iloc[0].Data_Value
-        except Exception as inst:
-            print(type(inst))     # the exception instance
-            print(inst.args)      # arguments stored in .args
-            print(inst)         
-            print("")
-        print("TMIN",vmin2015, vmin)
-        if vmin2015 < vmin:
-            x2015.append(mpl.dates.date2num(d))
-            v2015.append(vmin2015)
-            color.append("blue")
+        tmin2015_is = tmin2015[tmin2015.Date == d]        
+        vmin2015 = tmin2015_is.iloc[0].Data_Value
+        vmin2015_d2 =  tmin2015_is.iloc[0].d2        
+        tmin_is = tmin[tmin.d2 == vmin2015_d2]
+        if len(tmin_is)>0:
+            vmin =tmin_is.iloc[0].Data_Value
+       
+            if vmin2015 < vmin:
+                x2015.append(mpl.dates.date2num(d.replace(year = 2005)))
+                v2015.append(vmin2015)
+                color.append("blue")
+            
     except:
         pass
     try:    
-        vmax2015 = tmax2015[tmax2015.Date == d].iloc[0].Data_Value
-        vmax = tmax[tmax.Date == d].iloc[0].Data_Value
-        print("TMAX",vmax2015,vmax)
-        if vmax2015 > vmax:
-            x2015.append(mpl.dates.date2num(d))
-            v2015.append(vmax2015)
-            color.append("red")
+        tmax2015_is =  tmax2015[tmax2015.Date == d]
+        vmax2015 = tmax2015_is.iloc[0].Data_Value
+        vmax2015_d2 = tmax2015_is.iloc[0].d2
+        tmax_is = tmax[tmax.d2 == vmax2015_d2]
+        if len(tmax >0):
+            vmax = tmax_is.iloc[0].Data_Value 
+            print(vmax2015 > vmax,vmax2015, vmax)        
+            if vmax2015 > vmax:
+               
+                x2015.append(mpl.dates.date2num(d.replace(year = "2005")))
+                v2015.append(vmax2015)
+                color.append("red")
     except:
         pass
         
@@ -128,16 +130,17 @@ for d in tmin2015.Date :
 #%%
 plt.figure(figsize = (10,8))
 plt.subplot(111)
-points = plt.scatter(x2015,v2015,c = color, marker = "*", label = "days in 2015 that broke a record \n high or low for 2005-2014")    
+points = plt.scatter(x2015,v2015,c = color, marker = "*", label = "days in 2015 that broke a record \n high or low for 2005-2014 \n in database were only info for period [05.01.2015 - 22.01.2015]  ")    
 linemin, = plt.plot(tmin.flDate, tmin.Data_Value, color = "blue", label = "minimum for 2005-2014")
 linemax, = plt.plot(tmax.flDate, tmax.Data_Value, color = "red", label = "maximum for 2005-2014")
 plt.gca().fill_between(tmin.flDate,tmin.Data_Value,tmax.Data_Value,facecolor='m', alpha=0.25)
-plt.title("Record highs and lows temperature  for 2005-2014 in Donetsk \n stations:{},{}".format(data.ID.unique()[0],data.ID.unique()[1]))
+plt.title("Record highs and lows temperature  for 2005-2014 in Donetsk, Donetsk Public Republic \n LATITUDE 48° 0', LONGITUDE 37° 47' \n stations:{},{}".format(data.ID.unique()[0],data.ID.unique()[1]))
 plt.ylabel("degrees Celsius")
 
 plt.xlim(tmin.flDate.min(), tmin.flDate.max())
 plt.ylim(-40,65)
 first_legend = plt.legend(handles = [linemin, linemax,points], loc=1, frameon=False)
+
                           #bbox_to_anchor=(0.9, 0.9),  bbox_transform=plt.gcf().transFigure)
 #second_legend = plt.legend(handles = [points],loc = 3,frameon=False)
 
@@ -221,3 +224,13 @@ plt.savefig("weather.png")
 #df = pd.DataFrame({tmin
     
 #plt.plot(a)
+#%%
+#try:
+#            print("zn",pd.to_datetime(d), tmin.Date.dtypes)
+#            vmin = tmin[tmin.Date == pd.to_datetime(d)].iloc[0].Data_Value
+#        except Exception as inst:
+#            print(type(inst))     # the exception instance
+#            print(inst.args)      # arguments stored in .args
+#            print(inst)         
+#            print("")
+#            
