@@ -43,9 +43,10 @@ def update1(curr):
     bins4 = np.arange(-40,40,5)
     ax4.hist(x4[: i], bins=bins4 )
     
-a = animation.FuncAnimation(fig,update1,interval = 100, frames = np.arange(31), blit = True)    
+a = animation.FuncAnimation(fig,update1,interval = 100, frames = np.arange(31))    
 
  #%%
+ #https://ffmpeg.zeranoe.com/
 plt.rcParams['animation.ffmpeg_path'] = "d:\\Luna\\python\\ffmpeg\\bin\\ffmpeg.exe"
 #plt.rcParams['animation.ffmpeg_path'] = 'ffmpeg'
 FFwriter = animation.FFMpegWriter()
