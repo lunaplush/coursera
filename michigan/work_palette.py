@@ -8,8 +8,10 @@ Created on Wed Nov 29 09:12:14 2017
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+import os
 #%%
 #%matplotlib 
+
 n = 1000
 fig, [[ax1, ax2],[ax3,ax4]] = plt.subplots(2,2)
 fig.set_facecolor("w")
@@ -20,9 +22,9 @@ x3 = np.random.lognormal(mean = 0.0, sigma = 1.0, size = n )
 x4 = np.random.normal(loc = 0.0, scale = 10, size = n)
 k = 30
 def update1(curr):
-
-    if curr == k:
+    if curr > k:        
         a.event_source.stop()
+       
    
     
     ax1.cla()
@@ -41,10 +43,15 @@ def update1(curr):
     bins4 = np.arange(-40,40,5)
     ax4.hist(x4[: i], bins=bins4 )
     
-a = animation.FuncAnimation(fig,update1,interval = 100)    
+a = animation.FuncAnimation(fig,update1,interval = 100, frames = np.arange(31), blit = True)    
 
+ #%%
+plt.rcParams['animation.ffmpeg_path'] = "d:\\Luna\\python\\ffmpeg\\bin\\ffmpeg.exe"
+#plt.rcParams['animation.ffmpeg_path'] = 'ffmpeg'
+FFwriter = animation.FFMpegWriter()
+os.chdir("d:\\Luna\\python\\coursera\\michigan\\")
+a.save("assign3.avi",writer = FFwriter)
 #%%
-
 
 n = 100
 x = np.random.randn(n)
