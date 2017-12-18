@@ -30,39 +30,61 @@ bmap.mpl_colormap
 
 #%%
 
-inp = 32000
+inp = 47000
 
+
+N = 3650
+
+sigmas = np.array([200000.0,100000.0,140000.0,70000.0])
 np.random.seed(12345)
 
-df = pd.DataFrame([np.random.normal(32000,200000,3650), 
-                   np.random.normal(43000,100000,3650), 
-                   np.random.normal(43500,140000,3650), 
-                   np.random.normal(48000,70000,3650)], 
+df = pd.DataFrame([np.random.normal(32000,sigmas[0],N), 
+                   np.random.normal(43000,sigmas[1],N), 
+                   np.random.normal(43500,sigmas[2],N), 
+                   np.random.normal(48000,sigmas[3], N)], 
                   index=[1992,1993,1994,1995])
 
 
 #%matplotlib inline
 #fig = plt.subplot()
-fig,[ax1,ax2] = plt.subplots(1,2, sharey)
-#yerr= df.quantile([0.75], axis = 1).values - df.quantile([0.25], axis = 1).values.reshape(4)
-stds= np.sqrt(df.var(axis = 1))
-means = df.mean(axis = 1)
-conf_intervals = stats.norm.interval(0.05,loc = means, scale = stds)
-conf_interval = conf_intervals[1] - conf_intervals[0]
+#fig,[ax1,ax2] = plt.subplots(1,2, sharey = False)
+fig,ax1 = plt.subplots(1,1, sharey = False)
+#onlinestatbook.com/2/estimation/mean.html
+ 
+cmap=plt.get_cmap("seismic")
 
-colors = ['w','w','w','w']
+means = df.mean(axis = 1).values
+sigma_1_96_M = 1.96*sigmas/np.sqrt(N)                
+conf_intervals_mean_min =  means - sigma_1_96_M
+conf_intervals_mean_max =  means + sigma_1_96_M                  
+conf_interval_mean = (conf_intervals_mean_max - conf_intervals_mean_min)
+                
+colors = [cmap(0.5),cmap(0.5),cmap(0.5),cmap(0.5)]
 for i in np.arange(len(means)):
-    if inp > conf_intervals[0][i] and inp < conf_intervals[1][i] :
-        colors[i] = 'w'
-    if inp < conf_intervals[0][i] :
-        colors[i] = 'b'
-    if inp > conf_intervals[1][i] :    
-        colors[i] = 'r'
+    if inp >= conf_intervals_mean_min[i] and inp <= conf_intervals_mean_max[i] :
+        colors[i] = cmap(0.5)
+    #if inp <= conf_intervals_mean_min[i] - conf_interval_mean[i] :
+    #    colors[i] = cmap(0.99)
+   
+    if inp >= conf_intervals_mean_max[i] + conf_interval_mean[i]:    
+        colors[i] = cmap(0.99)
+    
+    if inp > conf_intervals_mean_max[i] and inp < conf_intervals_mean_max[i]+ conf_interval_mean[i]:    
+        colors[i] = cmap(0.5*(inp - conf_intervals_mean_max[i])/conf_interval_mean[i]+0.5)
+        print(colors[i])
         
-ax1.bar(df.index, df.mean(axis = 1), yerr = conf_interval , color = colors, align  = "center")
-
+    if inp < conf_intervals_mean_min[i] and inp > conf_intervals_mean_min[i] - conf_interval_mean[i] :
+        colors[i] = cmap(0.5 - np.abs(inp -conf_intervals_mean_min[i])/(conf_interval_mean[i])/2)
+    if inp < conf_intervals_mean_min[i] - conf_interval_mean[i] :
+        colors[i] = cmap(0)
+        
+    
+        
+ax1.bar(df.index, df.mean(axis = 1), yerr = (conf_interval_mean/2).reshape(4) , color = colors, align  = "center", tick_label = df.index, ecolor = "k")
+#ax1.scatter(1992,40000,color = cmap(0.55), linewidths  = 10)
 ax1.set_xticks(df.index)
-x_vals = ax1.get_xticks()
-ax1.set_xticklabels(['{0:d}'.format(x) for x in x_vals])
 ax1.plot([1991, 1996], [inp, inp],linestyle = 'dashed', color = "k")
-ax2.boxplot(df.transpose()[1992],whis ='range')
+
+
+
+ #%%
