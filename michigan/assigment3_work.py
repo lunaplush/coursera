@@ -67,16 +67,19 @@ for i in np.arange(len(means)):
     #    colors[i] = cmap(0.99)
    
     if inp >= conf_intervals_mean_max[i] + conf_interval_mean[i]:    
-        colors[i] = cmap(0.99)
+        colors[i] = cmap(0)
     
     if inp > conf_intervals_mean_max[i] and inp < conf_intervals_mean_max[i]+ conf_interval_mean[i]:    
-        colors[i] = cmap(0.5*(inp - conf_intervals_mean_max[i])/conf_interval_mean[i]+0.5)
-        print(colors[i])
+        #colors[i] = cmap(0.5*(inp - conf_intervals_mean_max[i])/conf_interval_mean[i]+0.5)
+        colors[i] = cmap(0.5 - (inp - conf_intervals_mean_max[i])/conf_interval_mean[i]/2)
+        
         
     if inp < conf_intervals_mean_min[i] and inp > conf_intervals_mean_min[i] - conf_interval_mean[i] :
-        colors[i] = cmap(0.5 - np.abs(inp -conf_intervals_mean_min[i])/(conf_interval_mean[i])/2)
+        #colors[i] = cmap(0.5 - np.abs(inp -conf_intervals_mean_min[i])/(conf_interval_mean[i])/2)
+       colors[i] = cmap(0.5*np.abs(inp -conf_intervals_mean_min[i])/(conf_interval_mean[i])+0.5)
+       
     if inp < conf_intervals_mean_min[i] - conf_interval_mean[i] :
-        colors[i] = cmap(0)
+        colors[i] = cmap(0.99)
         
     
         
@@ -84,7 +87,6 @@ ax1.bar(df.index, df.mean(axis = 1), yerr = (conf_interval_mean/2).reshape(4) , 
 #ax1.scatter(1992,40000,color = cmap(0.55), linewidths  = 10)
 ax1.set_xticks(df.index)
 ax1.plot([1991, 1996], [inp, inp],linestyle = 'dashed', color = "k")
-
-
+plt.savefig("answer.jpg")
 
  #%%
