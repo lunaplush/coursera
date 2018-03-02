@@ -79,12 +79,12 @@ f.close()
 
 #%%
 offices = np.array([[33.751277, -118.188740], \
-           [25.867736, -80.324116], \
-           [51.503016, -0.075479],\
+              [25.867736, -80.324116], \
+              [51.503016, -0.075479],\
            [52.378894, 4.885084], \
            [39.366487, 117.036146],\
            [-33.868457, 151.205134]])
-           
+             # [40.7143528, -74.0059731]
 #%%
 def dist(x,y):
    return  np.sqrt(np.power(x[0]-y[0],2) + np.power(x[1]-y[1],2))
@@ -100,7 +100,7 @@ i = distance.argmin()
 #%%
 f = open("answer.txt","w")
 
-f.write("{} {}".format(i[0],i[1]))
+f.write("{} {}".format(cluster_centers_big_clusters[i][0],cluster_centers_big_clusters[i][1]))
 f.close()
 
          
